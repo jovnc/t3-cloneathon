@@ -1,0 +1,18 @@
+{
+  "name": "t3-cloneathon",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "fe:dev": "pnpm --filter frontend dev",
+    "fe:build": "pnpm --filter frontend build",
+    "fe:start": "pnpm --filter frontend start",
+    "fe:lint": "pnpm --filter frontend lint",
+    "dev": "pnpm fe:dev",
+    "build": "pnpm --filter frontend build",
+    "lint": "pnpm --filter frontend lint",
+    "fe": "pnpm --filter frontend"
+  },
+  "devDependencies": {
+    "pnpm": "^9.0.0"
+  }
+}
