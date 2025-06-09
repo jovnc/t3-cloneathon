@@ -17,7 +17,7 @@ const FloatingTrigger = () => {
 
   return (
     <div className="fixed top-4 left-4 z-50 transition-all duration-300 ease-in-out animate-in fade-in-0 slide-in-from-left-5">
-      <SidebarTrigger className="bg-background/80 backdrop-blur-sm border shadow-lg hover:shadow-xl hover:bg-background/90 transition-all duration-200" />
+      <SidebarTrigger className="bg-background/50 backdrop-blur-sm border shadow-lg hover:shadow-xl hover:bg-background/20 transition-all duration-200 cursor-pointer" />
     </div>
   );
 };
@@ -30,7 +30,7 @@ export const AppSidebar = () => {
       <Sidebar>
         <SidebarHeader className="flex flex-row items-center justify-between p-4">
           <div className="font-semibold text-lg">T3 Chat</div>
-          <SidebarTrigger className="ml-auto" />
+          <SidebarTrigger className="ml-auto cursor-pointer bg-background/20 p-4" />
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup />
