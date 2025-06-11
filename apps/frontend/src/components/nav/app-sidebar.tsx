@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,11 +10,23 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import AuthButton from "@/components/auth/AuthButton";
 
 const FloatingTrigger = () => {
-  const { state } = useSidebar();
+  const { state, isMobile, openMobile } = useSidebar();
+  const [mounted, setMounted] = React.useState(false);
 
-  if (state === "expanded") return null;
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Show the floating trigger when:
+  // - Component is mounted
+  // - On mobile and sidebar is not open, OR
+  // - On desktop and sidebar is collapsed
+  if (!mounted) return null;
+  if (isMobile && openMobile) return null;
+  if (!isMobile && state === "expanded") return null;
 
   return (
     <div className="fixed top-4 left-4 z-50 transition-all duration-300 ease-in-out animate-in fade-in-0 slide-in-from-left-5">
@@ -30,13 +43,15 @@ export const AppSidebar = () => {
       <Sidebar>
         <SidebarHeader className="flex flex-row items-center justify-between p-4">
           <div className="font-semibold text-lg">T3 Chat</div>
-          <SidebarTrigger className="ml-auto cursor-pointer bg-background/20 p-4" />
+          <SidebarTrigger className="ml-auto cursor-pointer hover:bg-background/20 transition-colors duration-200" />
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup />
           <SidebarGroup />
         </SidebarContent>
-        <SidebarFooter />
+        <SidebarFooter className="p-4">
+          <AuthButton />
+        </SidebarFooter>
       </Sidebar>
     </>
   );
