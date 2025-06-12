@@ -3,6 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { LogIn, LogOut } from "lucide-react";
 
 export default function AuthButton() {
   const { data: session, status } = useSession();
@@ -18,8 +19,8 @@ export default function AuthButton() {
 
   if (session?.user) {
     return (
-      <div className="flex items-center justify-between space-x-2">
-        <div className="flex items-center space-x-2 min-w-0">
+      <div className="flex items-center justify-between border-t-[0.5px] border-secondary py-2">
+        <div className="flex items-center space-x-2 min-w-0 ">
           {session.user.image && (
             <img
               src={session.user.image}
@@ -40,9 +41,9 @@ export default function AuthButton() {
           variant="ghost"
           size="sm"
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="shrink-0"
+          className="h-8 w-8 p-0"
         >
-          Sign out
+          <LogOut className="h-4 w-4" />
         </Button>
       </div>
     );
@@ -50,8 +51,8 @@ export default function AuthButton() {
 
   return (
     <Link href="/auth/signin">
-      <Button variant="default" size="sm" className="w-full">
-        Sign in
+      <Button variant="ghost" size="sm" className="w-full">
+        <LogIn /> Login
       </Button>
     </Link>
   );
