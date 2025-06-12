@@ -51,8 +51,8 @@ export const AppSidebar = () => {
         <SidebarContent>
           <SidebarGroup>
             <div className="px-4 py-2">
-              <Button className="w-full mb-4">
-                <Plus className="w-4 h-4 mr-2" />
+              <Button className="w-full mb-4 items-center justify-center flex gap-2">
+                <Plus className="w-4 h-4" />
                 New Chat
               </Button>
 
