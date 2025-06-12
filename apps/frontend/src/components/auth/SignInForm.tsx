@@ -29,8 +29,8 @@ export default function SignInForm({ callbackUrl, error }: SignInFormProps) {
   return (
     <div className="w-full max-w-md space-y-6 p-6 shadow-lg">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Welcome</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-3xl font-bold text-primary">T3 Chat</h1>
+        <p className="text-muted-foreground text-sm">
           Sign in to your account to continue
         </p>
       </div>
@@ -60,7 +60,7 @@ export default function SignInForm({ callbackUrl, error }: SignInFormProps) {
         </Button>
       </div>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-center text-xs text-muted-foreground">
         By signing in, you agree to our{" "}
         <a href="#" className="underline underline-offset-4 hover:text-primary">
           Terms of Service

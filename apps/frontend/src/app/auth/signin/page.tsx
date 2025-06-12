@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/server/auth";
 import SignInForm from "@/components/auth/SignInForm";
+import BackButton from "@/components/nav/BackButton";
 
 export default async function SignInPage({
   searchParams,
@@ -16,9 +17,12 @@ export default async function SignInPage({
 
   return (
     <div className="flex h-screen w-full items-center justify-center p-4">
-      <SignInForm 
-        callbackUrl={searchParams.callbackUrl} 
-        error={searchParams.error} 
+      <div className="absolute top-4 left-4">
+        <BackButton />
+      </div>
+      <SignInForm
+        callbackUrl={searchParams.callbackUrl}
+        error={searchParams.error}
       />
     </div>
   );
