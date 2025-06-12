@@ -26,7 +26,7 @@ export default function InputBar({
         <form onSubmit={onSubmit}>
           <div className="border border-gray-300 rounded-lg p-3 flex flex-col gap-3">
             <Input
-              className="w-full border-none shadow-none p-0 text-sm placeholder:text-gray-500 focus-visible:ring-0"
+              className="w-full border-none shadow-none px-2 text-sm placeholder:text-gray-500 focus-visible:ring-0"
               value={input}
               placeholder="Type your message here..."
               onChange={onInputChange}
