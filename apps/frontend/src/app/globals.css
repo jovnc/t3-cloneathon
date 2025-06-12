@@ -63,9 +63,6 @@
   --color-card: var(--card);
 
   /* Status Colors */
-  --color-success: #b8d4b8;
-  --color-warning: #f0e68c;
-  --color-error: #e6b8b8;
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
