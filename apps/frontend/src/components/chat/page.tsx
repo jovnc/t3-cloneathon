@@ -2,8 +2,8 @@
 
 import { useChat } from '@ai-sdk/react';
 import { useState } from 'react';
-import MessageList from '../../components/chat/message-list';
-import InputBar from '../../components/chat/input-bar';
+import MessageList from './message-list';
+import InputBar from './input-bar';
 
 export default function ChatWindow() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
