@@ -2,7 +2,7 @@ import MessageList from "../../components/chat/message-list";
 import InputBar from "../../components/chat/input-bar";
 import { ChatProvider } from "@/providers/ChatProvider";
 
-export default function page() {
+export default async function page() {
   return (
     <div className="flex h-screen flex-col">
       <ChatProvider>
