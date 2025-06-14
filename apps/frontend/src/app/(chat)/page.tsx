@@ -1,16 +1,22 @@
-import MessageList from "../../components/chat/message-list";
-import InputBar from "../../components/chat/input-bar";
-import { ChatProvider } from "@/providers/ChatProvider";
+import { Chat } from "../../components/chat/chat";
+import { cookies } from "next/headers";
+import { DEFAULT_AI_MODEL } from "@/constants";
+import { generateUUID } from "@/lib/utils";
 
-export default function page() {
+export default async function page() {
+  const cookieStore = await cookies();
+  const modelIdFromCookie =
+    cookieStore.get("chat-model")?.value || DEFAULT_AI_MODEL;
+
+  // Generate a new chat ID for this session
+  const chatId = generateUUID();
+
   return (
-    <div className="flex h-screen flex-col">
-      <ChatProvider>
-        <div className="flex-1 overflow-y-auto">
-          <MessageList />
-        </div>
-        <InputBar />
-      </ChatProvider>
-    </div>
+    <Chat
+      id={chatId}
+      initialMessages={[]}
+      initialChatModel={modelIdFromCookie}
+      autoResume={false}
+    />
   );
 }

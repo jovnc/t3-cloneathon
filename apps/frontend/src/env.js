@@ -18,6 +18,8 @@ export const env = createEnv({
       .default("development"),
     SUPABASE_JWT_SECRET: z.string(),
     SUPABASE_SERVICE_ROLE_KEY: z.string(),
+    ANTHROPIC_API_KEY: z.string().optional(),
+    OPENAI_API_KEY: z.string().optional(),
   },
 
   // Environment variables available on the client-side (and server-side).
@@ -39,6 +41,8 @@ export const env = createEnv({
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
