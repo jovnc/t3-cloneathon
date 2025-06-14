@@ -49,6 +49,8 @@ export const authConfig = {
         };
         session.supabaseAccessToken = jwt.sign(payload, signingSecret);
       }
+      // Include user ID and type in session
+      session.user.id = user.id;
       return session;
     },
   },

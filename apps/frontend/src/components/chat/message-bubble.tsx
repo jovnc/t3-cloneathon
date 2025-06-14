@@ -27,9 +27,6 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             : "bg-white border border-gray-200 text-gray-900 rounded-bl-md"
         }`}
       >
-        <div className="font-semibold text-xs mb-1">
-          {isUser ? "You:" : "AI:"}
-        </div>
         {message.parts?.map((part: any, i: number) =>
           part.type === "text" ? <div key={i}>{part.text}</div> : null
         ) || message.content}
