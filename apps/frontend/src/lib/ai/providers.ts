@@ -1,21 +1,11 @@
-import { anthropic } from "@ai-sdk/anthropic";
-import { openai } from "@ai-sdk/openai";
+import { AI_MODELS } from "@/constants";
+import type { LanguageModelV1 } from "ai";
 
-export const myProvider = {
-  languageModel: (modelId: string) => {
-    switch (modelId) {
-      case "claude-3-5-sonnet-20241022":
-        return anthropic("claude-3-5-sonnet-20241022");
-      case "claude-4-sonnet-20250514":
-        return anthropic("claude-4-sonnet-20250514");
-      case "gpt-4":
-        return openai("gpt-4");
-      case "gpt-4-turbo":
-        return openai("gpt-4-turbo");
-      case "chat-model-reasoning":
-        return anthropic("claude-3-5-sonnet-20241022"); // fallback for reasoning model
-      default:
-        return anthropic("claude-3-5-sonnet-20241022");
-    }
-  },
+export const getModelFromSelection = (selection: string): LanguageModelV1 => {
+  const res = AI_MODELS.find((model) => model.value === selection);
+  if (!res) {
+    throw new Error(`Model with value ${selection} not found`);
+  }
+  const { wrapper, value } = res;
+  return wrapper(value);
 };

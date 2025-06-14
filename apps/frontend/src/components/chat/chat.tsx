@@ -36,7 +36,6 @@ export function Chat({
     append,
     status,
     stop,
-    reload,
     experimental_resume,
     data,
   } = useChat({
