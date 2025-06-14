@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { streamText, type CoreMessage } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { TRPCError } from "@trpc/server";
 
 export const chatRouter = createTRPCRouter({
   sendMessageStream: publicProcedure
@@ -18,12 +19,15 @@ export const chatRouter = createTRPCRouter({
           messages,
         });
 
-        // Yield each part of the stream as it comes in
         for await (const part of fullStream) {
           yield part;
         }
       } catch (error) {
-        console.error("Error streaming from AI service:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to stream response from AI service",
+          cause: error,
+        });
       }
     }),
 });
