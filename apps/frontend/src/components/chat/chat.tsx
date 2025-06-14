@@ -87,11 +87,7 @@ export function Chat({
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Message List */}
-      <MessageList
-        messages={messages}
-        reload={reload}
-        isLoading={status === "streaming" || status === "submitted"}
-      />
+      <MessageList messages={messages} />
 
       {/* Input Bar */}
       <InputBar
