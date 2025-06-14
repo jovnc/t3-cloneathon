@@ -1,12 +1,21 @@
-import { anthropic } from "@ai-sdk/anthropic";
-import { streamText } from "ai";
+import { streamText, type UIMessage } from "ai";
+import type { NextRequest } from "next/server";
+import { getModelFromSelection } from "@/lib/ai/providers";
 
-export async function POST(req: Request) {
+interface Payload {
+  id: string;
+  messages: UIMessage[];
+  selectedChatModel: string;
+}
+
+export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json();
+    const response: Payload = await req.json();
+    const { messages, selectedChatModel } = response;
+    console.log(selectedChatModel);
 
     const result = await streamText({
-      model: anthropic("claude-4-sonnet-20250514"),
+      model: getModelFromSelection(selectedChatModel),
       messages,
     });
 

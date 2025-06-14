@@ -39,6 +39,7 @@ export default function InputBar({
   stop,
   isStreaming = false,
 }: InputBarProps) {
+  // Controlled input change handler
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
