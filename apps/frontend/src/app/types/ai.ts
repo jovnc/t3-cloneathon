@@ -14,6 +14,7 @@ export type AIModel = {
   description: string;
   provider: string;
   wrapper: AnthropicProvider | OpenAIProvider;
+  icon: any
   capabilities: (ModelCapability | undefined)[]
   available: boolean
 };

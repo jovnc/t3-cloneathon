@@ -8,7 +8,7 @@ const UpgradeBanner = () => {
             <div>
               <h3 className="text-lg font-bold text-violet-950 mb-2">Unlock all models + higher limits</h3>
               <div className="flex items-baseline">
-                <span className="text-3xl font-bold text-violet-500">$8</span>
+                <span className="text-3xl font-extrabold text-violet-600">$8</span>
                 <span className="text-gray-600 ml-2">/month</span>
               </div>
             </div>

@@ -56,6 +56,7 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
   const ModelCard = ({ model }: { model: AIModel }) => {
     const isFavorite = favoriteModelIds.includes(model.value)
     const isHovered = hoveredCard === model.value
+    const Icon = model?.icon
 
     return (
       <Tooltip>
@@ -92,7 +93,7 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
             )}
 
             <div className="flex flex-col items-center text-center space-y-3">
-              <div className="flex items-center justify-center">{}</div>
+              <div className="flex items-center justify-center">{Icon && <Icon className="w-6 h-6" />}</div>
 
               <div>
                 <h3 className={`font-medium text-sm ${model.available ? "text-violet-950" : "text-violet-200"}`}>
@@ -177,7 +178,9 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
         ) : (
           // List View - Favorites Models List
           <div className="space-y-3">
-            {displayedModels.map((model) => (
+            {favoriteModels.map((model) => {
+                const Icon = model?.icon
+            return (
               <div
                 key={model.value}
                 onClick={() => handleModelSelect(model)}
@@ -190,6 +193,7 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
                 }`}
               >
                 <div className="flex items-center space-x-4">
+                    {Icon && <Icon className="h-4 w-4 text-violet-900"/>}
                   <div className="flex flex-col">
                     <span className={`text-md font-medium ${model.available ? "text-violet-900" : "text-violet-300"}`}>
                       {model.label}
@@ -211,8 +215,8 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
                     return (
                       <Tooltip key={index}>
                         <TooltipTrigger>
-                          <div className={`p-2 rounded-full ${capability?.color} transition-colors hover:opacity-80`}>
-                            {Icon && <Icon />}
+                          <div className={`p-1 rounded-full ${capability?.color} transition-colors hover:opacity-80`}>
+                            {Icon && <Icon className="w-4 h-4"/>}
                           </div>
                         </TooltipTrigger>
                         <TooltipContent>
@@ -223,7 +227,7 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
                   })}
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         )}
 

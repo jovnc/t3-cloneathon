@@ -1,6 +1,6 @@
 import type { AIModel, ModelCapability } from "@/app/types"
 import { anthropic } from "@ai-sdk/anthropic"
-import { Eye, Brain, FileText, Settings, ImageIcon, Globe } from "lucide-react"
+import { Eye, Brain, FileText, Settings, ImageIcon, Globe, Sparkle } from "lucide-react"
 
 const capabilities: Record<string, ModelCapability> = {
   vision: {
@@ -44,6 +44,7 @@ export const AI_MODELS: AIModel[] = [
     description: "Coding and reasoning model from Anthropic",
     provider: "Anthropic",
     wrapper: anthropic,
+    icon: Brain,
     capabilities: [capabilities.vision, capabilities.documents, capabilities.reasoning],
     available: true,
   },
@@ -53,6 +54,7 @@ export const AI_MODELS: AIModel[] = [
     description: "Previous version of Anthropic's coding model",
     provider: "Anthropic",
     wrapper: anthropic,
+    icon: Sparkle,
     capabilities: [capabilities.vision, capabilities.documents, capabilities.reasoning],
     available: true,
   },
