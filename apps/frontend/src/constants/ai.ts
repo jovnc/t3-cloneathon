@@ -1,6 +1,6 @@
 import type { AIModel, ModelCapability } from "@/app/types"
 import { anthropic } from "@ai-sdk/anthropic"
-import { Eye, Globe, FileText, Settings, ImageIcon } from "lucide-react"
+import { Eye, Brain, FileText, Settings, ImageIcon, Globe } from "lucide-react"
 
 const capabilities: Record<string, ModelCapability> = {
   vision: {
@@ -12,7 +12,7 @@ const capabilities: Record<string, ModelCapability> = {
   search: {
     type: "search",
     label: "Uses search to answer questions",
-    icon: Eye,
+    icon: Globe,
     color: "bg-blue-100 text-blue-600",
   },
   documents: {
@@ -24,8 +24,8 @@ const capabilities: Record<string, ModelCapability> = {
   reasoning: {
     type: "reasoning",
     label: "Has reasoning capabilities",
-    icon: Settings,
-    color: "bg-purple-100 text-purple-600",
+    icon: Brain,
+    color: "bg-violet-100 text-violet-600",
   },
   imageGeneration: {
     type: "image-generation",

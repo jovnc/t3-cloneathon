@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { AI_MODELS } from "@/constants/ai"
 import type { AIModel } from "@/app/types"
+import UpgradeBanner from "./upgrade-banner"
 
 interface ModelSelectorProps {
   selectedModel: string
@@ -42,25 +43,11 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
             placeholder="Search models..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 text-lg py-3 border-0 border-b-2 border-gray-200 rounded-none focus:border-purple-500 focus:ring-0"
+            className="pl-10 text-lg py-3 rounded-md"
           />
         </div>
 
-        {/* Upgrade Banner */}
-        <div className="bg-gradient-to-r from-pink-50 to-purple-50 border border-pink-200 rounded-lg p-6 mb-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">Unlock all models + higher limits</h3>
-              <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-pink-600">$8</span>
-                <span className="text-gray-600 ml-2">/month</span>
-              </div>
-            </div>
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold">
-              Upgrade now
-            </Button>
-          </div>
-        </div>
+        <UpgradeBanner />
 
         {/* Models List */}
         <div className="space-y-4">
@@ -68,24 +55,23 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
             <div
               key={model.value}
               onClick={() => handleModelSelect(model)}
-              className={`flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer ${
+              className={`flex items-center justify-between p-4 rounded-lg transition-all cursor-pointer ${
                 model.available
                   ? selectedModel === model.value
-                    ? "bg-purple-50 border-purple-300 ring-2 ring-purple-200"
-                    : "hover:bg-gray-50 border-gray-200"
-                  : "opacity-50 border-gray-100 cursor-not-allowed"
+                    ? "bg-primary/10 "
+                    : "hover:bg-gray-50"
+                  : "opacity-50 cursor-not-allowed"
               }`}
             >
               <div className="flex items-center space-x-4">
                 <div className="flex flex-col">
-                  <span className={`text-lg font-medium ${model.available ? "text-gray-800" : "text-gray-400"}`}>
+                  <span className={`text-md font-medium ${model.available ? "text-violet-500" : "text-violet-300"}`}>
                     {model.label}
                   </span>
-                  <span className="text-sm text-gray-500">{model.provider}</span>
                 </div>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Info className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+                    <Info className="w-4 h-4 text-violet-400 hover:text-violet-500" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="max-w-xs">{model.description}</p>
@@ -115,7 +101,7 @@ export default function ModelSelector({ selectedModel, onChange }: ModelSelector
         </div>
 
         {/* Show All Toggle */}
-        {filteredModels.length > 7 && (
+        {(
           <div className="mt-6 pt-4 border-t border-gray-200">
             <Button
               variant="ghost"
