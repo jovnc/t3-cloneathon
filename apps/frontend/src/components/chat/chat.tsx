@@ -2,12 +2,14 @@
 
 import type { UIMessage } from "ai";
 import { useChat } from "@ai-sdk/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
 import { ChatSDKError } from "@/lib/errors";
 import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useAutoResume } from "@/hooks/use-auto-resume";
+import { useChats } from "@/hooks/use-chats";
+import { api } from "@/trpc/react";
 import MessageList from "./message-list";
 import InputBar from "./input-bar";
 
@@ -26,6 +28,19 @@ export function Chat({
 }: ChatProps) {
   const [selectedModel, setSelectedModel] = useState(initialChatModel);
   const [searchEnabled, setSearchEnabled] = useState(false);
+  const [isCreatingFirstMessage, setIsCreatingFirstMessage] = useState(false);
+  const isMountedRef = useRef(true);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const { ensureChat } = useChats();
+  const utils = api.useUtils();
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const {
     messages,
@@ -55,25 +70,95 @@ export function Chat({
         toast(`Error: ${error.message}`);
       }
     },
+    onFinish: async (message, options) => {
+      // Invalidate the chat list cache to update sidebar titles
+      try {
+        await utils.chat.getUserChats.invalidate();
+        // Also invalidate the specific chat to ensure fresh data
+        await utils.chat.getChat.invalidate({ chatId: id });
+      } catch (error) {
+        console.error("Failed to invalidate cache:", error);
+      }
+    },
   });
 
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
-
   const [hasAppendedQuery, setHasAppendedQuery] = useState(false);
 
-  // TODO: change implementation to use a more robust state management solution
+  // Reset hasAppendedQuery when the query changes (for edge cases)
+  useEffect(() => {
+    if (!query) {
+      setHasAppendedQuery(false);
+    }
+  }, [query]);
+
+  const customHandleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>, chatRequestOptions?: any) => {
+      const isFirstMessage =
+        pathname === "/" &&
+        initialMessages.length === 0 &&
+        messages.length === 0;
+
+      if (isFirstMessage && input.trim()) {
+        e.preventDefault(); // Prevent default form submission
+        setIsCreatingFirstMessage(true);
+
+        try {
+          // 1. Create chat in database first
+          await ensureChat({ chatId: id });
+
+          // 2. Navigate to chat page with the message as a query param
+          const messageContent = encodeURIComponent(input.trim());
+          router.push(`/chat/${id}?query=${messageContent}`);
+
+          // Clear the input since we're navigating away
+          setInput("");
+        } catch (error) {
+          console.error("Failed to create chat:", error);
+          toast.error("Failed to send message. Please try again.");
+          setIsCreatingFirstMessage(false);
+          return;
+        }
+      } else {
+        // For existing chats, proceed normally
+        handleSubmit(e, chatRequestOptions);
+      }
+    },
+    [
+      pathname,
+      initialMessages.length,
+      messages.length,
+      input,
+      ensureChat,
+      id,
+      router,
+      handleSubmit,
+      setInput,
+    ]
+  );  // Handle query parameter for first message
   useEffect(() => {
     if (query && !hasAppendedQuery) {
+      const decodedQuery = decodeURIComponent(query);
+      
+      // Add the message and trigger AI response
       append({
         role: "user",
-        content: query,
+        content: decodedQuery,
       });
 
       setHasAppendedQuery(true);
-      window.history.replaceState({}, "", `/chat/${id}`);
+      
+      // Clean up the URL by removing the query parameter
+      const newUrl = `/chat/${id}`;
+      window.history.replaceState({}, "", newUrl);
+      
+      // Invalidate cache immediately after first message to update sidebar
+      setTimeout(() => {
+        utils.chat.getUserChats.invalidate();
+      }, 100);
     }
-  }, [query, append, hasAppendedQuery, id]);
+  }, [query, append, hasAppendedQuery, id, utils.chat.getUserChats]);
 
   useAutoResume({
     autoResume,
@@ -94,10 +179,14 @@ export function Chat({
         setSelectedModel={setSelectedModel}
         searchEnabled={searchEnabled}
         setSearchEnabled={setSearchEnabled}
-        handleSubmit={handleSubmit}
+        handleSubmit={customHandleSubmit}
         input={input}
         setInput={setInput}
-        disabled={status === "streaming" || status === "submitted"}
+        disabled={
+          status === "streaming" ||
+          status === "submitted" ||
+          isCreatingFirstMessage
+        }
         stop={stop}
         isStreaming={status === "streaming"}
       />

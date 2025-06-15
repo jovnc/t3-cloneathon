@@ -11,14 +11,10 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import AuthButton from "@/components/auth/AuthButton";
+import AuthButton from "@/components/auth/auth-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
-
-const MOCK_CHATS = [
-  { id: "1", title: "Test title generation", createdAt: new Date() },
-];
 
 const FloatingTrigger = () => {
   const { state, isMobile, openMobile } = useSidebar();
@@ -39,7 +35,7 @@ const FloatingTrigger = () => {
   );
 };
 
-export const AppSidebar = () => {
+export const AppSidebar = ({ children }: { children?: React.ReactNode }) => {
   return (
     <>
       <FloatingTrigger />
@@ -51,10 +47,12 @@ export const AppSidebar = () => {
         <SidebarContent>
           <SidebarGroup>
             <div className="px-4 py-2">
-              <Button className="w-full mb-4 items-center justify-center flex gap-2">
-                <Plus className="w-4 h-4" />
-                New Chat
-              </Button>
+              <Link href="/">
+                <Button className="w-full mb-4 items-center justify-center flex gap-2">
+                  <Plus className="w-4 h-4" />
+                  New Chat
+                </Button>
+              </Link>
 
               <div className="mb-4 flex flex-row rounded-lg border-[1px] border-gray-200 items-center justify-between px-2 bg-white">
                 <Search className="w-4 h-4 text-gray-400" />
@@ -64,20 +62,8 @@ export const AppSidebar = () => {
                 />
               </div>
 
-              <div className="text-xs font-medium text-gray-500 mb-2">
-                Today
-              </div>
-              <div className="space-y-1">
-                {MOCK_CHATS.map((chat) => (
-                  <Link
-                    key={chat.id}
-                    href={`/chat/${chat.id}`}
-                    className="block p-2 text-sm text-gray-700 hover:bg-gray-50 rounded cursor-pointer"
-                  >
-                    {chat.title}
-                  </Link>
-                ))}
-              </div>
+              {/* Sidebar Chat List */}
+              {children}
             </div>
           </SidebarGroup>
         </SidebarContent>
