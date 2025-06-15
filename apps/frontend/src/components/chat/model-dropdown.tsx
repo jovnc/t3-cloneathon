@@ -27,7 +27,7 @@ export default function ModelDropdown({ selectedModel, onChange }: ModelDropdown
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="flex items-center space-x-2 text-purple-500 hover:text-purple-400 hover:bg-primary/10 px-3 py-2 rounded-lg"
+          className="flex items-center space-x-2 text-violet-500 hover:text-violet-400 hover:bg-primary/10 px-3 py-2 rounded-lg"
         >
           <span className="font-medium">{selectedModelData?.label || "Select Model"}</span>
           <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
