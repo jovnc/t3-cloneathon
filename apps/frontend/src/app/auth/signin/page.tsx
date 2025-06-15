@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/server/auth";
-import SignInForm from "@/components/auth/SignInForm";
-import BackButton from "@/components/nav/BackButton";
+import SignInForm from "@/components/auth/sign-in-form";
+import BackButton from "@/components/nav/back-button";
 
 export default async function SignInPage({
   searchParams,

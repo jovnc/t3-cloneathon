@@ -5,6 +5,8 @@ import { generateUUID } from "@/lib/utils";
 
 export default async function page() {
   const cookieStore = await cookies();
+
+  // TODO: implement saving model selection in cookies
   const modelIdFromCookie =
     cookieStore.get("chat-model")?.value || DEFAULT_AI_MODEL;
 
