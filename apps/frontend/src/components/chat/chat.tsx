@@ -50,9 +50,11 @@ export function Chat({
     setInput,
     append,
     status,
+    error,
     stop,
     experimental_resume,
     data,
+    reload,
   } = useChat({
     id,
     initialMessages,
@@ -136,11 +138,13 @@ export function Chat({
       handleSubmit,
       setInput,
     ]
-  );  // Handle query parameter for first message
+  );
+
+  // Handle query parameter for first message
   useEffect(() => {
     if (query && !hasAppendedQuery) {
       const decodedQuery = decodeURIComponent(query);
-      
+
       // Add the message and trigger AI response
       append({
         role: "user",
@@ -148,11 +152,11 @@ export function Chat({
       });
 
       setHasAppendedQuery(true);
-      
+
       // Clean up the URL by removing the query parameter
       const newUrl = `/chat/${id}`;
       window.history.replaceState({}, "", newUrl);
-      
+
       // Invalidate cache immediately after first message to update sidebar
       setTimeout(() => {
         utils.chat.getUserChats.invalidate();
@@ -171,7 +175,7 @@ export function Chat({
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Message List */}
-      <MessageList messages={messages} />
+      <MessageList messages={messages} error={error} reload={reload} />
 
       {/* Input Bar */}
       <InputBar

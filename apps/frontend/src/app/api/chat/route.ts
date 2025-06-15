@@ -11,6 +11,9 @@ interface Payload {
   selectedChatModel: string;
 }
 
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
+
 export async function POST(req: NextRequest) {
   try {
     const response: Payload = await req.json();
@@ -70,7 +73,14 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return result.toDataStreamResponse();
+    // consume stream to ensure run to completion even with client disconnects
+    // client can restore from storage solution if needed
+    result.consumeStream();
+
+    return result.toDataStreamResponse({
+      sendUsage: false,
+      sendReasoning: true,
+    });
   } catch (error) {
     console.error("Error in chat route:", error);
     return new Response("Server Error", { status: 500 });

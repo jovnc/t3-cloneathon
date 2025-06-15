@@ -1,5 +1,6 @@
 import { User, Bot } from "lucide-react";
 import type { Message } from "ai";
+import ReasoningDisplay from "./reasoning-display";
 
 interface MessageBubbleProps {
   message: Message;
@@ -7,6 +8,10 @@ interface MessageBubbleProps {
 
 export default function MessageBubble({ message }: MessageBubbleProps) {
   const isUser = message.role === "user";
+
+  // Get reasoning parts for display
+  const reasoningParts =
+    message.parts?.filter((part: any) => part.type === "reasoning") || [];
 
   return (
     <div className={`mb-6 flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -27,9 +32,18 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             : "bg-white border border-gray-200 text-gray-900 rounded-bl-md"
         }`}
       >
-        {message.parts?.map((part: any, i: number) =>
-          part.type === "text" ? <div key={i}>{part.text}</div> : null
-        ) || message.content}
+        {/* Text Content */}
+        <div>
+          {message.parts?.map((part: any, i: number) => {
+            if (part.type === "text") {
+              return <div key={i}>{part.text}</div>;
+            }
+            return null;
+          }) || message.content}
+        </div>
+
+        {/* Reasoning Section */}
+        {!isUser && <ReasoningDisplay reasoningParts={reasoningParts} />}
       </div>
 
       {/* Avatar */}
