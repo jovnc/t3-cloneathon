@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import ModelSelector from "./model-selector";
 import type { ChatRequestOptions } from "ai";
+import ModelDropdown from "./model-dropdown";
 
 interface InputBarProps {
   selectedModel: string;
@@ -59,8 +60,8 @@ export default function InputBar({
               />
 
               <div className="flex items-center justify-between">
-                {/* Model selector dropdown */}
-                <ModelSelector
+                {/* Model dropdown */}
+                <ModelDropdown
                   selectedModel={selectedModel}
                   onChange={setSelectedModel}
                 />
