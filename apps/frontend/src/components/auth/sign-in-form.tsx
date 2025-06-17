@@ -1,24 +1,16 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-interface SignInFormProps {
-  callbackUrl?: string;
-  error?: string;
-}
-
-export default function SignInForm({ callbackUrl, error }: SignInFormProps) {
+export default function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      await signIn("google", {
-        callbackUrl: callbackUrl || "/",
-        redirect: true,
-      });
+      await signIn();
     } catch (error) {
       console.error("Sign in error:", error);
     } finally {
@@ -34,18 +26,6 @@ export default function SignInForm({ callbackUrl, error }: SignInFormProps) {
           Sign in to your account to continue
         </p>
       </div>
-
-      {error && (
-        <div className="rounded-md border border-destructive/20 bg-destructive/10 p-3">
-          <p className="text-sm text-destructive">
-            {error === "OAuthAccountNotLinked"
-              ? "This email is already associated with another account. Please sign in with the same provider you used before."
-              : error === "AccessDenied"
-              ? "Access denied. Please try again."
-              : "An error occurred during sign in. Please try again."}
-          </p>
-        </div>
-      )}
 
       <div className="space-y-4">
         <Button
