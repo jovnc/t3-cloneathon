@@ -10,15 +10,6 @@ export async function signIn() {
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
-    options: {
-      redirectTo: getURL(),
-      scopes: "email profile",
-      queryParams: {
-        access_type: "offline", // Request offline access for refresh tokens
-        prompt: "consent", // Ensure consent screen is shown
-      },
-
-    },
   });
 
   console.log(getURL());
