@@ -13,7 +13,7 @@ export async function signIn() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${getURL()}api/auth/callback`,
+      redirectTo: `https://t3-cloneathon-frontend.vercel.app/api/auth/callback`,
     },
   });
 
