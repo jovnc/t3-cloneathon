@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { getModelFromSelection } from "@/lib/ai/providers";
 import { saveMessages, ensureChatExists } from "@/lib/db/ai";
 import type { Message } from "@/lib/db/types";
-import { auth } from "@/server/auth";
+import { createClient } from "@/lib/supabase/server";
 
 interface Payload {
   id: string;
@@ -20,8 +20,9 @@ export async function POST(req: NextRequest) {
     const { id: chatId, messages, selectedChatModel } = response;
 
     // Get the authenticated user
-    const session = await auth();
-    const userId = session?.user?.id;
+    const supabase = await createClient();
+    const session = await supabase.auth.getUser();
+    const userId = session.data.user?.id;
 
     const result = await streamText({
       model: getModelFromSelection(selectedChatModel),

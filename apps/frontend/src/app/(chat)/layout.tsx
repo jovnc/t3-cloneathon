@@ -10,10 +10,6 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const sidebarState = cookieStore.get("sidebar_state")?.value;
-  const defaultOpen = sidebarState !== "false";
-
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
@@ -21,7 +17,7 @@ export default async function Layout({
   }
 
   return (
-    <SidebarProvider defaultOpen={defaultOpen}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar>
         <ChatList />
       </AppSidebar>

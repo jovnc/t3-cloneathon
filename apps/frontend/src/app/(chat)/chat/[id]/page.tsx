@@ -1,10 +1,10 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { DEFAULT_AI_MODEL } from "@/constants";
 import { Chat } from "@/components/chat/chat";
-import { auth } from "@/server/auth";
 import { getChat } from "@/lib/db/ai";
 import type { UIMessage } from "ai";
+import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 
 interface PageProps {
   params: Promise<{
@@ -23,13 +23,10 @@ export default async function page({ params, searchParams }: PageProps) {
   const { id } = await params;
   const { query } = await searchParams;
 
-  const session = await auth();
-  const userId = session?.user?.id;
+  const supabase = await createClient();
+  const { data: session, error } = await supabase.auth.getSession();
 
-  // If user is not authenticated, redirect to auth
-  if (!session || !userId) {
-    redirect("/auth/signin");
-  }
+  const userId = session.session?.user.id;
 
   try {
     const chat = await getChat(id, userId);
@@ -46,10 +43,12 @@ export default async function page({ params, searchParams }: PageProps) {
       );
     }
 
-    if (chat.userId !== userId) {
-      console.warn(`User ${userId} doesn't have access to chat ${id}`);
-      redirect("/");
-    }
+    console.log(`Loaded chat ${id} for user ${userId}`);
+
+    // if (chat.userId !== userId) {
+    //   console.warn(`User ${userId} doesn't have access to chat ${id}`);
+    //   redirect("/");
+    // }
 
     const initialMessages = chat.messages.map((msg) => ({
       id: msg.id,

@@ -1,6 +1,7 @@
 import { User, Bot } from "lucide-react";
 import type { Message } from "ai";
 import ReasoningDisplay from "./reasoning-display";
+import MessageMarkdown from "./message-markdown";
 
 interface MessageBubbleProps {
   message: Message;
@@ -36,14 +37,11 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         <div>
           {message.parts?.map((part: any, i: number) => {
             if (part.type === "text") {
-              return <div key={i}>{part.text}</div>;
+              return <MessageMarkdown key={i} message={part.text} />;
             }
             return null;
           }) || message.content}
         </div>
-
-        {/* Reasoning Section */}
-        {!isUser && <ReasoningDisplay reasoningParts={reasoningParts} />}
       </div>
 
       {/* Avatar */}
