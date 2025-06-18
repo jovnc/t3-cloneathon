@@ -9,6 +9,7 @@ interface Payload {
   id: string;
   messages: UIMessage[];
   selectedChatModel: string;
+  api_key: string;
 }
 
 // Allow streaming responses up to 30 seconds
@@ -17,7 +18,14 @@ export const maxDuration = 30;
 export async function POST(req: NextRequest) {
   try {
     const response: Payload = await req.json();
-    const { id: chatId, messages, selectedChatModel } = response;
+    const { id: chatId, messages, selectedChatModel, api_key } = response;
+
+    console.log("Received chat request:", {
+      chatId,
+      messages: messages.length,
+      selectedChatModel,
+      api_key: api_key, // Log if API key is provided
+    });
 
     // Get the authenticated user
     const supabase = await createClient();
@@ -25,7 +33,7 @@ export async function POST(req: NextRequest) {
     const userId = session.data.user?.id;
 
     const result = await streamText({
-      model: getModelFromSelection(selectedChatModel),
+      model: getModelFromSelection(selectedChatModel, api_key),
       messages,
       onFinish: async (completion) => {
         try {

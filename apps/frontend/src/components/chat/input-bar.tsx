@@ -1,16 +1,17 @@
 "use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Paperclip, Send, Square } from "lucide-react";
+import { Search, Paperclip, Send, Square, Key } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import ModelSelector from "./model-selector";
 import type { ChatRequestOptions } from "ai";
 import ModelDropdown from "./model-dropdown";
+import { ApiKeyDialog } from "@/components/auth/api-key-dialog";
 
 interface InputBarProps {
   selectedModel: string;
@@ -40,9 +41,20 @@ export default function InputBar({
   stop,
   isStreaming = false,
 }: InputBarProps) {
+  const [isApiKeyDialogOpen, setIsApiKeyDialogOpen] = useState(false);
+
   // Controlled input change handler
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
+  };
+
+  const handleApiKeySet = (apiKey: string) => {
+    setIsApiKeyDialogOpen(false);
+    // You could add additional logic here if needed, like refreshing the UI
+  };
+
+  const handleApiKeyDialogClose = () => {
+    setIsApiKeyDialogOpen(false);
   };
 
   return (
@@ -101,6 +113,23 @@ export default function InputBar({
                     </TooltipContent>
                   </Tooltip>
 
+                  {/* API Key button */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsApiKeyDialogOpen(true)}
+                      >
+                        <Key className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Update API Key</p>
+                    </TooltipContent>
+                  </Tooltip>
+
                   {/* Stop button - show when streaming */}
                   {isStreaming && stop && (
                     <Tooltip>
@@ -143,6 +172,13 @@ export default function InputBar({
           </form>
         </div>
       </div>
+
+      {/* API Key Dialog */}
+      <ApiKeyDialog
+        isOpen={isApiKeyDialogOpen}
+        onApiKeySet={handleApiKeySet}
+        onClose={handleApiKeyDialogClose}
+      />
     </TooltipProvider>
   );
 }

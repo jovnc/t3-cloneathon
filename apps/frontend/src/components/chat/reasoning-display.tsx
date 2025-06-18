@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronRight, Brain } from "lucide-react";
+import { ChevronDown, ChevronRight, Brain, Sparkles } from "lucide-react";
 
 interface ReasoningDisplayProps {
   reasoningParts: any[];
@@ -15,40 +15,49 @@ export default function ReasoningDisplay({
   if (!reasoningParts.length) return null;
 
   return (
-    <div className="mt-3 border-t border-gray-100 pt-3">
+    <div className="mb-4">
       <button
         onClick={() => setShowReasoning(!showReasoning)}
-        className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-700 transition-colors group"
+        className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-all duration-200 group border border-gray-200"
       >
         {showReasoning ? (
-          <ChevronDown className="w-3 h-3" />
+          <ChevronDown className="w-4 h-4 transition-transform duration-200" />
         ) : (
-          <ChevronRight className="w-3 h-3" />
+          <ChevronRight className="w-4 h-4 transition-transform duration-200" />
         )}
-        <Brain className="w-3 h-3 text-blue-500" />
-        <span className="group-hover:text-blue-600">View reasoning</span>
+        <Sparkles className="w-4 h-4 text-purple-500" />
+        <span className="font-medium">
+          {showReasoning ? "Hide" : "Show"} thinking process
+        </span>
+        <span className="text-xs text-gray-400 ml-1">
+          ({reasoningParts.length} step{reasoningParts.length !== 1 ? "s" : ""})
+        </span>
       </button>
 
       {showReasoning && (
-        <div className="mt-3 space-y-2">
+        <div className="mt-3 space-y-3 animate-in slide-in-from-top-2 duration-300">
           {reasoningParts.map((part: any, i: number) => (
             <div
               key={i}
-              className="bg-blue-50 border border-blue-100 rounded-lg p-3"
+              className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-100 rounded-xl p-4 shadow-sm"
             >
-              <div className="flex items-center gap-2 mb-2">
-                <Brain className="w-3 h-3 text-blue-600" />
-                <span className="text-xs font-medium text-blue-700">
-                  Model Reasoning
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                  <Brain className="w-3 h-3 text-purple-600" />
+                </div>
+                <span className="text-sm font-semibold text-purple-800">
+                  Thinking
                 </span>
               </div>
-              <div className="text-xs text-gray-700 font-mono bg-white p-3 rounded border border-blue-100 overflow-x-auto">
-                <pre className="whitespace-pre-wrap">
-                  {part.details
-                    ?.map((detail: any, j: number) =>
-                      detail.type === "text" ? detail.text : "<redacted>"
-                    )
-                    .join("") || "No reasoning details available"}
+              <div className="bg-white rounded-lg p-4 border border-purple-100 shadow-sm">
+                <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono leading-relaxed overflow-x-auto">
+                  {part.content ||
+                    part.details
+                      ?.map((detail: any) =>
+                        detail.type === "text" ? detail.text : "<redacted>"
+                      )
+                      .join("") ||
+                    "No reasoning details available"}
                 </pre>
               </div>
             </div>

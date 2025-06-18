@@ -66,6 +66,7 @@ export function Chat({
       id,
       messages: body.messages,
       selectedChatModel: selectedModel,
+      api_key: localStorage.getItem("openrouter_api_key") || "",
     }),
     onError: (error) => {
       if (error instanceof ChatSDKError) {
