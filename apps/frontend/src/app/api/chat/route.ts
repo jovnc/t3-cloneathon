@@ -3,12 +3,13 @@ import type { NextRequest } from "next/server";
 import { getModelFromSelection } from "@/lib/ai/providers";
 import { saveMessages, ensureChatExists } from "@/lib/db/ai";
 import type { Message } from "@/lib/db/types";
-import { auth } from "@/server/auth";
+import { createClient } from "@/lib/supabase/server";
 
 interface Payload {
   id: string;
   messages: UIMessage[];
   selectedChatModel: string;
+  api_key: string;
 }
 
 // Allow streaming responses up to 30 seconds
@@ -17,14 +18,22 @@ export const maxDuration = 30;
 export async function POST(req: NextRequest) {
   try {
     const response: Payload = await req.json();
-    const { id: chatId, messages, selectedChatModel } = response;
+    const { id: chatId, messages, selectedChatModel, api_key } = response;
+
+    console.log("Received chat request:", {
+      chatId,
+      messages: messages.length,
+      selectedChatModel,
+      api_key: api_key, // Log if API key is provided
+    });
 
     // Get the authenticated user
-    const session = await auth();
-    const userId = session?.user?.id;
+    const supabase = await createClient();
+    const session = await supabase.auth.getUser();
+    const userId = session.data.user?.id;
 
     const result = await streamText({
-      model: getModelFromSelection(selectedChatModel),
+      model: getModelFromSelection(selectedChatModel, api_key),
       messages,
       onFinish: async (completion) => {
         try {

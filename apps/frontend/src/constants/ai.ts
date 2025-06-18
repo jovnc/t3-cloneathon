@@ -1,6 +1,13 @@
-import type { AIModel, ModelCapability } from "@/app/types"
-import { anthropic } from "@ai-sdk/anthropic"
-import { Eye, Brain, FileText, Settings, ImageIcon, Globe, Sparkle } from "lucide-react"
+import type { AIModel, ModelCapability } from "@/app/types";
+import {
+  Eye,
+  Brain,
+  FileText,
+  ImageIcon,
+  Globe,
+  Sparkle,
+  Moon,
+} from "lucide-react";
 
 const capabilities: Record<string, ModelCapability> = {
   vision: {
@@ -33,30 +40,54 @@ const capabilities: Record<string, ModelCapability> = {
     icon: ImageIcon,
     color: "bg-orange-100 text-orange-600",
   },
-}
+};
 
-export const DEFAULT_AI_MODEL = "claude-3-7-sonnet-20250219"
+export const DEFAULT_AI_MODEL = "anthropic/claude-3.7-sonnet";
+
+export const FAVOURITE_MODELS: string[] = [
+  "anthropic/claude-3.7-sonnet",
+  "anthropic/claude-3.5-sonnet",
+  "moonshotai/kimi-dev-72b:free",
+];
 
 export const AI_MODELS: AIModel[] = [
   {
-    value: "claude-3-7-sonnet-20250219",
+    value: "anthropic/claude-3.7-sonnet",
     label: "Claude 3.7 Sonnet",
     description: "Coding and reasoning model from Anthropic",
     provider: "Anthropic",
-    wrapper: anthropic,
     icon: Brain,
-    capabilities: [capabilities.vision, capabilities.documents, capabilities.reasoning],
+    capabilities: [
+      capabilities.vision,
+      capabilities.documents,
+      capabilities.reasoning,
+    ],
     available: true,
   },
   {
-    value: "claude-3-5-sonnet-20241022",
+    value: "anthropic/claude-3.5-sonnet",
     label: "Claude 3.5 Sonnet",
     description: "Previous version of Anthropic's coding model",
     provider: "Anthropic",
-    wrapper: anthropic,
     icon: Sparkle,
-    capabilities: [capabilities.vision, capabilities.documents, capabilities.reasoning],
+    capabilities: [
+      capabilities.vision,
+      capabilities.documents,
+      capabilities.reasoning,
+    ],
     available: true,
   },
-  
-]
+  {
+    value: "moonshotai/kimi-dev-72b:free",
+    label: "Kimi Dev 72B",
+    description: "Open-source coding model from Moonshot AI",
+    provider: "Moonshot AI",
+    icon: Moon,
+    capabilities: [
+      capabilities.vision,
+      capabilities.documents,
+      capabilities.reasoning,
+    ],
+    available: true,
+  },
+];

@@ -19,7 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { AI_MODELS } from "@/constants/ai";
+import { AI_MODELS, FAVOURITE_MODELS } from "@/constants/ai";
 import type { AIModel } from "@/app/types";
 // import UpgradeBanner from "./upgrade-banner";
 
@@ -36,10 +36,7 @@ export default function ModelSelector({
   const [showAll, setShowAll] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
-  const [favoriteModelIds, setFavoriteModelIds] = useState([
-    "claude-3-7-sonnet-20250219",
-    "claude-3-5-sonnet-20241022",
-  ]);
+  const [favoriteModelIds, setFavoriteModelIds] = useState(FAVOURITE_MODELS);
 
   const filteredModels = AI_MODELS.filter(
     (model: AIModel) =>
@@ -211,6 +208,7 @@ export default function ModelSelector({
           <div className="space-y-2 mb-2">
             {favoriteModels.map((model) => {
               const Icon = model?.icon;
+
               return (
                 <div
                   key={model.value}

@@ -7,7 +7,7 @@ export const chatRouter = createTRPCRouter({
   // Get all chats for the authenticated user
   getUserChats: protectedProcedure.query(async ({ ctx }) => {
     try {
-      const userId = ctx.session.user.id;
+      const userId = ctx.user?.id as string;
       const chats = await getUserChats(userId);
       return chats;
     } catch (error) {
@@ -25,7 +25,7 @@ export const chatRouter = createTRPCRouter({
     .input(z.object({ chatId: z.string() }))
     .query(async ({ input, ctx }) => {
       try {
-        const userId = ctx.session.user.id;
+        const userId = ctx.user?.id as string;
         const chat = await getChat(input.chatId, userId);
 
         if (!chat) {
@@ -62,7 +62,7 @@ export const chatRouter = createTRPCRouter({
     .input(z.object({ title: z.string().optional() }))
     .mutation(async ({ input, ctx }) => {
       try {
-        const userId = ctx.session.user.id;
+        const userId = ctx.user?.id as string;
         const chatId = crypto.randomUUID();
 
         const chat = await ctx.db.chats.create({
@@ -99,7 +99,7 @@ export const chatRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const userId = ctx.session.user.id;
+        const userId = ctx.user?.id as string;
 
         const chat = await ctx.db.chats.upsert({
           where: {
