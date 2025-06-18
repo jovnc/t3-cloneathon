@@ -12,8 +12,17 @@ export async function signIn() {
     provider: "google",
     options: {
       redirectTo: getURL(),
+      scopes: "email profile",
+      queryParams: {
+        access_type: "offline", // Request offline access for refresh tokens
+        prompt: "consent", // Ensure consent screen is shown
+      },
+
     },
   });
+
+  console.log(getURL());
+  console.log(data);
 
   if (error) {
     redirect("/auth/error");
