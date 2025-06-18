@@ -8,6 +8,8 @@ import { redirect } from "next/navigation";
 export async function signIn() {
   const supabase = await createClient();
 
+  console.log(`${getURL()}api/auth/callback`);
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
